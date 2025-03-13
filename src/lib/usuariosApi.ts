@@ -19,7 +19,26 @@ export async function usuariosGet(): Promise<User[]> {
         console.log(data)
         return data;
     } catch (error) {
-        console.error('Failed to fetch users:', error);
+        console.error('Fallo el fecth usuario:', error);
+        throw error;
+    }
+}
+
+
+
+export async function usuariosGetPorId(id: string): Promise<User[]> {
+    try {
+        const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
+
+        if (!response.ok) {
+        throw new Error(`Error fetching usuarios: ${response.statusText}`);
+        }
+
+        const data: User[] = await response.json();
+        console.log(data)
+        return data;
+    } catch (error) {
+        console.error('Fallo el fecth usuario por id:', error);
         throw error;
     }
 }

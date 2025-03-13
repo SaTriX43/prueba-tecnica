@@ -26,7 +26,6 @@ export default function Usuarios() {
 
   return (
     <div className={Styles['usuarios']}>
-      <h1>App consumo de API - Santiago Gonzales</h1>
       <h2>Usuarios:</h2>
       <div className={Styles['usuarios__contenedor-input']}>
         <label htmlFor="busqueda">Buscar por nombre o username:</label>

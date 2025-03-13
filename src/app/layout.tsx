@@ -26,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <h1 className='titulo'>App consumo de API - Santiago Gonzales</h1>
         <UsuarioContextProvider>
           {children}
         </UsuarioContextProvider>
