@@ -1,8 +1,6 @@
-// src/componentes/Usuario.tsx
 import React from 'react';
 import Styles from './usuario.module.css'
 
-// Definimos la interfaz Usuario dentro del archivo
 interface Usuario {
   id: number;
   name: string;
