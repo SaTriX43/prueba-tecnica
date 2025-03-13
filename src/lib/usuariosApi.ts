@@ -26,7 +26,7 @@ export async function usuariosGet(): Promise<User[]> {
 
 
 
-export async function usuariosGetPorId(id: string): Promise<User[]> {
+export async function usuarioGetPorId(id: string): Promise<User[]> {
     try {
         const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
 
