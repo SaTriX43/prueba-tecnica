@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Styles from './page.module.css';
 
 export default function PublicacionDetalle({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
-  const params = React.use(paramsPromise); 
+  const params = React.use(paramsPromise);
   const contexto = useContext(PublicacionContext);
   const router = useRouter();
 
@@ -14,7 +14,7 @@ export default function PublicacionDetalle({ params: paramsPromise }: { params: 
     throw new Error('PublicacionContext debe usarse dentro de un PublicacionContextProvider');
   }
 
-  const { publicacionSeleccionada, cargando, error } = contexto;
+  const { publicacionSeleccionada, comentarios, cargando, error } = contexto;
 
   const volverAPublicaciones = () => {
     router.push('/posts');
@@ -38,8 +38,19 @@ export default function PublicacionDetalle({ params: paramsPromise }: { params: 
       <button onClick={volverAPublicaciones} className={Styles['detalle__publicacion-boton']}>
         Volver a la lista
       </button>
-      <div>
-        <p>comentarios</p>
+      <div className={Styles['detalle__publicacion-comentarios']}>
+        <h2>Comentarios</h2>
+        {comentarios.length > 0 ? (
+          <ul>
+            {comentarios.map((comentario) => (
+              <li key={comentario.id}>
+                <strong>{comentario.name}</strong> ({comentario.email}): {comentario.body}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No hay comentarios para esta publicación.</p>
+        )}
       </div>
     </div>
   );

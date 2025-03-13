@@ -39,3 +39,24 @@
 .detalle__publicacion-boton:hover {
     background-color: rgb(67, 67, 67);
 }
+
+.detalle__publicacion-comentarios {
+    margin-top: 20px;
+}
+
+.detalle__publicacion-comentarios h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.detalle__publicacion-comentarios ul {
+    list-style: none;
+    padding: 0;
+}
+
+.detalle__publicacion-comentarios li {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}

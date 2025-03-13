@@ -15,7 +15,7 @@ export async function usuariosGet(): Promise<User[]> {
       throw new Error(`Error fetching usuarios: ${response.statusText}`);
     }
 
-    const data: User[] = await response.json(); // Directamente un array de User
+    const data: User[] = await response.json();
     console.log(data);
     return data;
   } catch (error) {

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { publicacionesGet, publicacionGetPorId } from '@/lib/publicacionesApi';
+import { publicacionesGet, publicacionGetPorId, comentariosGetPorPublicacionId } from '@/lib/publicacionesApi';
 
 interface Publicacion {
   id: number;
@@ -10,14 +10,24 @@ interface Publicacion {
   body: string;
 }
 
+interface Comment {
+  id: number;
+  postId: number;
+  name: string;
+  email: string;
+  body: string;
+}
+
 interface TipoPublicacionContexto {
   publicaciones: Publicacion[];
   publicacionesFiltradas: Publicacion[];
-  publicacionSeleccionada: Publicacion | null; 
+  publicacionSeleccionada: Publicacion | null;
+  comentarios: Comment[];
   cargando: boolean;
   error: string | null;
   obtenerPublicaciones: () => Promise<void>;
-  obtenerPublicacionPorId: (id: string) => Promise<void>; 
+  obtenerPublicacionPorId: (id: string) => Promise<void>;
+  obtenerComentariosPorPublicacionId: (postId: string) => Promise<void>; 
   filtrarPublicaciones: (terminoBusqueda: string) => void;
 }
 
@@ -30,7 +40,8 @@ interface PublicacionContextProviderProps {
 export const PublicacionContextProvider: React.FC<PublicacionContextProviderProps> = ({ children }) => {
   const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
   const [publicacionesFiltradas, setPublicacionesFiltradas] = useState<Publicacion[]>([]);
-  const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<Publicacion | null>(null); 
+  const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<Publicacion | null>(null);
+  const [comentarios, setComentarios] = useState<Comment[]>([]); 
   const [cargando, setCargando] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,10 +66,26 @@ export const PublicacionContextProvider: React.FC<PublicacionContextProviderProp
     try {
       const publicacion = await publicacionGetPorId(id);
       setPublicacionSeleccionada(publicacion);
+      await obtenerComentariosPorPublicacionId(id);
     } catch (err) {
       setError(`Fallo al obtener publicación con id ${id}`);
       console.log(err);
       setPublicacionSeleccionada(null);
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const obtenerComentariosPorPublicacionId = async (postId: string) => {
+    setCargando(true);
+    setError(null);
+    try {
+      const comentariosData = await comentariosGetPorPublicacionId(postId);
+      setComentarios(comentariosData);
+    } catch (err) {
+      setError(`Fallo al obtener comentarios para la publicación con id ${postId}`);
+      console.log(err);
+      setComentarios([]);
     } finally {
       setCargando(false);
     }
@@ -83,10 +110,12 @@ export const PublicacionContextProvider: React.FC<PublicacionContextProviderProp
         publicaciones,
         publicacionesFiltradas,
         publicacionSeleccionada,
+        comentarios,
         cargando,
         error,
         obtenerPublicaciones,
         obtenerPublicacionPorId,
+        obtenerComentariosPorPublicacionId, 
         filtrarPublicaciones,
       }}
     >
