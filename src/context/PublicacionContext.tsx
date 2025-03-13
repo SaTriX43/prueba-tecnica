@@ -11,10 +11,12 @@ interface Publicacion {
 }
 
 interface TipoPublicacionContexto {
-  publicaciones: Publicacion[];
+  publicaciones: Publicacion[];        
+  publicacionesFiltradas: Publicacion[]; 
   cargando: boolean;
   error: string | null;
   obtenerPublicaciones: () => Promise<void>;
+  filtrarPublicaciones: (terminoBusqueda: string) => void;
 }
 
 export const PublicacionContext = createContext<TipoPublicacionContexto | undefined>(undefined);
@@ -25,6 +27,7 @@ interface PublicacionContextProviderProps {
 
 export const PublicacionContextProvider: React.FC<PublicacionContextProviderProps> = ({ children }) => {
   const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
+  const [publicacionesFiltradas, setPublicacionesFiltradas] = useState<Publicacion[]>([]);
   const [cargando, setCargando] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,12 +37,22 @@ export const PublicacionContextProvider: React.FC<PublicacionContextProviderProp
     try {
       const data = await publicacionesGet();
       setPublicaciones(data);
+      setPublicacionesFiltradas(data); 
     } catch (err) {
       setError('Fallo al obtener publicaciones');
       console.log(err);
     } finally {
       setCargando(false);
     }
+  };
+
+  const filtrarPublicaciones = (terminoBusqueda: string) => {
+    const termino = terminoBusqueda.toLowerCase();
+    const filtrados = publicaciones.filter((publicacion) =>
+      publicacion.title.toLowerCase().includes(termino) || 
+      publicacion.body.toLowerCase().includes(termino)
+    );
+    setPublicacionesFiltradas(filtrados);
   };
 
   useEffect(() => {
@@ -50,9 +63,11 @@ export const PublicacionContextProvider: React.FC<PublicacionContextProviderProp
     <PublicacionContext.Provider
       value={{
         publicaciones,
+        publicacionesFiltradas,
         cargando,
         error,
         obtenerPublicaciones,
+        filtrarPublicaciones,
       }}
     >
       {children}

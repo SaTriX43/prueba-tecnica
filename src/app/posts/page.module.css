@@ -4,6 +4,44 @@
     width: 100%;
 
     gap: 20px;
+
+    align-items: center;
+}
+
+.publicaciones__boton-redireccion-inicio {
+    display: flex;
+    width: 200px;
+    height: 30px;
+
+    margin: auto;
+    margin-bottom: 10px;
+
+
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.publicaciones__boton-redireccion-inicio:hover {
+    background-color: rgb(67, 67, 67);
+}
+
+
+
+.publicaciones__contenedor-input {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    font-size: 22px;
+}
+
+.publicaciones-input {
+    display: flex;
+    height: 30px;
+    padding: 0px 10px;
+    font-size: 18px;
 }
 
 .publicaciones__lista {
@@ -14,6 +52,8 @@
 
     align-items: center;
 }
+
+
 
 .publicaciones__lista-elementos {
     display: flex;
