@@ -1,0 +1,31 @@
+/* src/componentes/usuario.module.css */
+.usuario__contenedor {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 80px;
+
+    gap: 20px;
+
+    padding: 20px 0px;
+    border: 2px solid rgb(212, 212, 212);
+
+
+    align-items: center;
+    justify-content: flex-start; 
+    
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    color: rgb(215, 215, 215);
+  }
+  
+  .usuario__contenedor:hover {
+    background-color: rgb(87, 87, 87);
+  }
+  
+  /* Ajustamos los márgenes de los elementos internos para que no añadan espacio extra */
+  .usuario__contenedor h3,
+  .usuario__contenedor p {
+    margin: 0; /* Eliminamos márgenes predeterminados */
+  }

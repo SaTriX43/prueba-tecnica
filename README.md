@@ -57,3 +57,26 @@ npm run dev
 
 Accede a http://localhost:3000 para ver la app funcionando. 🎉
 
+---------------------------------------------------
+
+1.-Pagina usuarios (principal)
+En esta pagina lo que hago es recibir la informacion de context y mapearla para mostrarla en mi pagina por su componente Usuario
+
+2.-
+
+
+
+---------------------------------
+Context
+1.-UsuarioContext.tsx
+recibo la informacion y los guardo en un estado para luego centralizar todo y poder distribuir mejor la informacion a mi pagina principal 
+
+-uso lo que es una funcion que me ayuda a guardar el valor de lo que mi usuario escriba en el input y despues filtra dependiendo de si hay coincidencias o no 
+
+---------------------------------
+
+Componentes 
+
+Usuario.tsx: 
+Es para agrupar la informacion del usuario y poder estilizar mejor e organizarlo mejor tambien 
+recibe la informacion del padre
