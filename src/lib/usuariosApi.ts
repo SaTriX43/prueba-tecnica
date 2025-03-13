@@ -26,7 +26,7 @@ export async function usuariosGet(): Promise<User[]> {
 
 
 
-export async function usuarioGetPorId(id: string): Promise<User[]> {
+export async function usuarioGetPorId(id: string): Promise<User> {
     try {
         const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
 
@@ -34,8 +34,7 @@ export async function usuarioGetPorId(id: string): Promise<User[]> {
         throw new Error(`Error fetching usuarios: ${response.statusText}`);
         }
 
-        const data: User[] = await response.json();
-        console.log(data)
+        const data: User = await response.json();
         return data;
     } catch (error) {
         console.error('Fallo el fecth usuario por id:', error);

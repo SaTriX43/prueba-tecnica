@@ -1,8 +1,7 @@
-// src/components/context/UsuarioContext.tsx
 'use client';
 
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { usuariosGet } from '@/lib/usuariosApi';
+import { usuarioGetPorId, usuariosGet } from '@/lib/usuariosApi';
 
 interface Usuario {
   id: number;
@@ -16,9 +15,11 @@ interface Usuario {
 interface TipoUsuarioContexto {
   usuarios: Usuario[];
   usuariosFiltrados: Usuario[];
+  usuarioSeleccionado : Usuario | null;
   cargando: boolean;
   error: string | null;
   obtenerUsuarios: () => Promise<void>;
+  obtenerUsuarioPorId: (id: string) => Promise<void>;
   filtrarUsuarios: (terminoBusqueda: string) => void;
 }
 
@@ -31,6 +32,7 @@ interface UsuarioContextProviderProps {
 export const UsuarioContextProvider: React.FC<UsuarioContextProviderProps> = ({ children }) => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [usuariosFiltrados, setUsuariosFiltrados] = useState<Usuario[]>([]);
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<Usuario | null>(null);
   const [cargando, setCargando] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,6 +51,23 @@ export const UsuarioContextProvider: React.FC<UsuarioContextProviderProps> = ({ 
     }
   };
 
+  const obtenerUsuarioPorId = async (id: string) => {
+    setCargando(true);
+    setError(null);
+    try {
+      const usuario = await usuarioGetPorId(id);
+      setUsuarioSeleccionado(usuario);
+    } catch (err) {
+      setError(`Fallo al obtener usuario con id ${id}`);
+      console.log(err);
+      setUsuarioSeleccionado(null);
+    } finally {
+      setCargando(false);
+    }
+  };
+
+
+
   const filtrarUsuarios = (terminoBusqueda: string) => {
     const termino = terminoBusqueda.toLowerCase();
     const filtrados = usuarios.filter((usuario) =>
@@ -66,10 +85,12 @@ export const UsuarioContextProvider: React.FC<UsuarioContextProviderProps> = ({ 
       value={{
         usuarios,
         usuariosFiltrados,
+        usuarioSeleccionado,
         cargando,
         error,
         obtenerUsuarios,
         filtrarUsuarios,
+        obtenerUsuarioPorId
       }}
     >
       {children}
