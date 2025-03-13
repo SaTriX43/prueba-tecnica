@@ -13,7 +13,7 @@ export default function Posts() {
     throw new Error('PublicacionContext debe usarse dentro de un PublicacionContextProvider');
   }
 
-  const { publicacionesFiltradas, cargando, error, filtrarPublicaciones } = contexto;
+  const { publicacionesFiltradas, cargando, error, filtrarPublicaciones, obtenerPublicacionPorId } = contexto; 
   const [terminoBusqueda, setTerminoBusqueda] = useState<string>('');
 
   const manejarCambioInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +26,14 @@ export default function Posts() {
     router.push('/');
   };
 
+  const manejarClickPublicacion = async (id: number) => {
+    try {
+      await obtenerPublicacionPorId(id.toString()); 
+      router.push(`/posts/${id}`);
+    } catch (err) {
+      console.error('Error al redirigir:', err);
+    }
+  };
 
   if (cargando) return <p>Cargando...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -52,7 +60,12 @@ export default function Posts() {
       </div>
       <ul className={Styles['publicaciones__lista']}>
         {publicacionesFiltradas.map((publicacion) => (
-          <li key={publicacion.id} className={Styles['publicaciones__lista-elementos']}>
+          <li
+            key={publicacion.id}
+            onClick={() => manejarClickPublicacion(publicacion.id)}
+            className={Styles['publicaciones__lista-elementos']}
+            style={{ cursor: 'pointer' }}
+          >
             <h2>{publicacion.title}</h2>
             <p>{publicacion.body}</p>
           </li>

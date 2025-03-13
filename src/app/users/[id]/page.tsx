@@ -1,4 +1,3 @@
-// src/app/users/[id]/page.tsx
 'use client';
 
 import React, { useContext } from 'react';
@@ -7,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 
 export default function UsuarioDetalle({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
-  const params = React.use(paramsPromise); // Desempaquetamos la Promise
+  const params = React.use(paramsPromise); 
   const contexto = useContext(UsuarioContext);
   const router = useRouter();
 

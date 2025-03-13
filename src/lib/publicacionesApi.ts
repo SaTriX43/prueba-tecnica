@@ -19,3 +19,17 @@ export async function publicacionesGet(): Promise<Post[]> {
     throw error;
   }
 }
+export async function publicacionGetPorId(id: string): Promise<Post> {
+  try {
+    const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error fetching publicacion con id ${id}: ${response.statusText}`);
+    }
+    const data: Post = await response.json();
+    console.log("Publicacion obtenida:", data);
+    return data;
+  } catch (error) {
+    console.error(`Fallo el fetch de la publicacion con id ${id}:`, error);
+    throw error;
+  }
+}

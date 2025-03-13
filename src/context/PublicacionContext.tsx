@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { publicacionesGet } from '@/lib/publicacionesApi';
+import { publicacionesGet, publicacionGetPorId } from '@/lib/publicacionesApi';
 
 interface Publicacion {
   id: number;
@@ -11,11 +11,13 @@ interface Publicacion {
 }
 
 interface TipoPublicacionContexto {
-  publicaciones: Publicacion[];        
-  publicacionesFiltradas: Publicacion[]; 
+  publicaciones: Publicacion[];
+  publicacionesFiltradas: Publicacion[];
+  publicacionSeleccionada: Publicacion | null; 
   cargando: boolean;
   error: string | null;
   obtenerPublicaciones: () => Promise<void>;
+  obtenerPublicacionPorId: (id: string) => Promise<void>; 
   filtrarPublicaciones: (terminoBusqueda: string) => void;
 }
 
@@ -28,6 +30,7 @@ interface PublicacionContextProviderProps {
 export const PublicacionContextProvider: React.FC<PublicacionContextProviderProps> = ({ children }) => {
   const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
   const [publicacionesFiltradas, setPublicacionesFiltradas] = useState<Publicacion[]>([]);
+  const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<Publicacion | null>(null); 
   const [cargando, setCargando] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,10 +40,25 @@ export const PublicacionContextProvider: React.FC<PublicacionContextProviderProp
     try {
       const data = await publicacionesGet();
       setPublicaciones(data);
-      setPublicacionesFiltradas(data); 
+      setPublicacionesFiltradas(data);
     } catch (err) {
       setError('Fallo al obtener publicaciones');
       console.log(err);
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const obtenerPublicacionPorId = async (id: string) => {
+    setCargando(true);
+    setError(null);
+    try {
+      const publicacion = await publicacionGetPorId(id);
+      setPublicacionSeleccionada(publicacion);
+    } catch (err) {
+      setError(`Fallo al obtener publicación con id ${id}`);
+      console.log(err);
+      setPublicacionSeleccionada(null);
     } finally {
       setCargando(false);
     }
@@ -64,9 +82,11 @@ export const PublicacionContextProvider: React.FC<PublicacionContextProviderProp
       value={{
         publicaciones,
         publicacionesFiltradas,
+        publicacionSeleccionada,
         cargando,
         error,
         obtenerPublicaciones,
+        obtenerPublicacionPorId,
         filtrarPublicaciones,
       }}
     >
