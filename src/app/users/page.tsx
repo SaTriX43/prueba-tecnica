@@ -49,7 +49,7 @@ export default function Usuarios() {
       </button>
       <h2>Usuarios:</h2>
       <div className={Styles['usuarios__contenedor-input']}>
-        <label htmlFor="busqueda">Buscar por nombre o username:</label>
+        <label htmlFor="busqueda">Buscar por nombre o usuario:</label>
         <input
           type="text"
           id="busqueda"
