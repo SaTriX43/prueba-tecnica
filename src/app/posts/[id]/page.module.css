@@ -60,3 +60,13 @@
     border-radius: 5px;
     border: 1px solid #ddd;
 }
+
+
+.detalle__publicacion-comentario-textarea {
+    display: flex;
+    width: 90%; 
+    max-width: 500;
+    margin: auto;
+    padding: 0px 5px;
+    font-size: 18px;
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { PublicacionContext } from '@/context/PublicacionContext';
 import { useRouter } from 'next/navigation';
 import Styles from './page.module.css';
@@ -14,10 +14,27 @@ export default function PublicacionDetalle({ params: paramsPromise }: { params: 
     throw new Error('PublicacionContext debe usarse dentro de un PublicacionContextProvider');
   }
 
-  const { publicacionSeleccionada, comentarios, cargando, error } = contexto;
+  const { publicacionSeleccionada, comentarios, cargando, error, agregarComentario } = contexto;
+  const [nuevoComentarioTexto, setNuevoComentarioTexto] = useState<string>('');
 
   const volverAPublicaciones = () => {
     router.push('/posts');
+  };
+
+  const manejarEnvioComentario = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (nuevoComentarioTexto.trim() === '') return;
+
+    const nuevoComentario = {
+      id: Date.now(), 
+      postId: Number(params.id),
+      name: 'Usuario Anónimo',
+      email: 'anonimo@example.com', 
+      body: nuevoComentarioTexto,
+    };
+
+    agregarComentario(nuevoComentario);
+    setNuevoComentarioTexto(''); 
   };
 
   if (cargando) return <p>Cargando...</p>;
@@ -51,6 +68,18 @@ export default function PublicacionDetalle({ params: paramsPromise }: { params: 
         ) : (
           <p>No hay comentarios para esta publicación.</p>
         )}
+        <form onSubmit={manejarEnvioComentario}>
+          <textarea
+            value={nuevoComentarioTexto}
+            onChange={(e) => setNuevoComentarioTexto(e.target.value)}
+            placeholder="Escribe tu comentario aquí..."
+            className={Styles['detalle__publicacion-comentario-textarea']}
+            rows={4}
+            cols={50}
+          />
+          <br />
+          <button className={Styles['detalle__publicacion-boton']} type="submit">Enviar Comentario</button>
+        </form>
       </div>
     </div>
   );

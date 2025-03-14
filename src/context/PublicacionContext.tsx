@@ -1,3 +1,4 @@
+// PublicacionContext.tsx
 'use client';
 
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
@@ -27,7 +28,8 @@ interface TipoPublicacionContexto {
   error: string | null;
   obtenerPublicaciones: () => Promise<void>;
   obtenerPublicacionPorId: (id: string) => Promise<void>;
-  obtenerComentariosPorPublicacionId: (postId: string) => Promise<void>; 
+  obtenerComentariosPorPublicacionId: (postId: string) => Promise<void>;
+  agregarComentario: (nuevoComentario: Comment) => void; 
   filtrarPublicaciones: (terminoBusqueda: string) => void;
 }
 
@@ -41,7 +43,7 @@ export const PublicacionContextProvider: React.FC<PublicacionContextProviderProp
   const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
   const [publicacionesFiltradas, setPublicacionesFiltradas] = useState<Publicacion[]>([]);
   const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<Publicacion | null>(null);
-  const [comentarios, setComentarios] = useState<Comment[]>([]); 
+  const [comentarios, setComentarios] = useState<Comment[]>([]);
   const [cargando, setCargando] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -91,10 +93,14 @@ export const PublicacionContextProvider: React.FC<PublicacionContextProviderProp
     }
   };
 
+  const agregarComentario = (nuevoComentario: Comment) => {
+    setComentarios((prevComentarios) => [...prevComentarios, nuevoComentario]);
+  };
+
   const filtrarPublicaciones = (terminoBusqueda: string) => {
     const termino = terminoBusqueda.toLowerCase();
     const filtrados = publicaciones.filter((publicacion) =>
-      publicacion.title.toLowerCase().includes(termino) || 
+      publicacion.title.toLowerCase().includes(termino) ||
       publicacion.body.toLowerCase().includes(termino)
     );
     setPublicacionesFiltradas(filtrados);
@@ -115,7 +121,8 @@ export const PublicacionContextProvider: React.FC<PublicacionContextProviderProp
         error,
         obtenerPublicaciones,
         obtenerPublicacionPorId,
-        obtenerComentariosPorPublicacionId, 
+        obtenerComentariosPorPublicacionId,
+        agregarComentario, 
         filtrarPublicaciones,
       }}
     >
